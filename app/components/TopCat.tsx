@@ -2,8 +2,8 @@
 export default function Home() {
     return (
       <div className="p-8">
-        <h1 className="text-2xl font-bold mb-6">Top Categories</h1>
-        <div className="flex  flex-row gap-4 justify-center">
+        <h1 className="text-2xl container mx-auto font-bold mb-6">Top Categories</h1>
+        <div className="grid container mx-auto sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 justify-center">
          
           <div className="border rounded-lg overflow-hidden shadow-md">
             <img
