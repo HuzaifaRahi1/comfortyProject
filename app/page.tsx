@@ -1,13 +1,14 @@
-import Hero from "./Hero";
-import ItemCard from "./components/ItemCard";
+import Hero from "./components/Hero";
+import ItemCards from "./components/ItemCards";
 import TopCategories from "./components/TopCat";
-export default function Home() {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <main>
       <div>
         <Hero />
-        <ItemCard />
+        <ItemCards />
         <TopCategories />
+        
       </div>
     </main>
   )
