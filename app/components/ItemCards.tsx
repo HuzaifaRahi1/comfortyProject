@@ -1,13 +1,15 @@
-"use client"
+"use client";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { client } from "@/sanity/lib/client";
 
 export default function ItemCards() {
-  const [products, setProducts] = useState<any[]>([]); // State to store product data
+  const [products, setProducts] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
-    // Fetch all products from Sanity
     const fetchProducts = async () => {
       const query = `
         *[_type == "product"] {
@@ -23,18 +25,25 @@ export default function ItemCards() {
         }
       `;
       try {
-        const result = await client.fetch(query); // Fetch data using GROQ query
-        setProducts(result); // Update state with fetched products
+        const result = await client.fetch(query);
+        setProducts(result);
       } catch (error) {
         console.error("Error fetching products:", error);
+        setError(true);
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchProducts(); // Call the fetch function
-  }, []); // Run only once on component mount
+    fetchProducts();
+  }, []);
 
-  if (products.length === 0) {
-    return <p className="text-center mt-6">Loading products...</p>; // Loading state
+  if (loading) {
+    return <p className="text-center mt-6">Loading products...</p>;
+  }
+
+  if (error) {
+    return <p className="text-center mt-6 text-red-500">Failed to load products. Please try again later.</p>;
   }
 
   return (
@@ -63,9 +72,11 @@ export default function ItemCards() {
 
                 {/* Link to dynamic product page */}
                 <Link href={`/${product._id}`}>
-                  <img
-                    src={product.image?.asset?.url}
+                  <Image
+                    src={product.image?.asset?.url || "/placeholder.png"}
                     alt={product.name}
+                    width={400}
+                    height={200}
                     className="w-full h-48 object-cover cursor-pointer"
                   />
                 </Link>

@@ -1,4 +1,5 @@
-"use client"
+"use client";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { client } from "@/sanity/lib/client";
@@ -44,9 +45,11 @@ export default function SingleProduct() {
       <div className="flex flex-col md:flex-row items-center space-y-8 md:space-y-0">
         {/* Product Image */}
         <div className="flex-1 flex justify-center">
-          <img
+          <Image
             src={image?.asset?.url}
             alt={name}
+            width={500}  // Fixed width for optimization
+            height={500} // Fixed height for optimization
             className="w-full max-w-md object-contain"
           />
         </div>

@@ -1,4 +1,5 @@
-"use client"
+"use client";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { client } from "@/sanity/lib/client";
@@ -8,26 +9,30 @@ export default function Hero() {
 
   useEffect(() => {
     const fetchProduct = async () => {
-      const query = `
-        *[_type == "product"][0] {
-          _id,
-          name,
-          description,
-          image {
-            asset -> {
-              url
+      try {
+        const query = `
+          *[_type == "product"][0] {
+            _id,
+            name,
+            description,
+            image {
+              asset -> {
+                url
+              }
             }
           }
-        }
-      `;
-      const result = await client.fetch(query);
-      setProduct(result);
+        `;
+        const result = await client.fetch(query);
+        setProduct(result);
+      } catch (error) {
+        console.error("Error fetching product:", error);
+      }
     };
 
     fetchProduct();
   }, []);
 
-  if (!product) return <p>Loading...</p>;
+  if (!product) return <p className="text-center text-gray-500">Loading...</p>;
 
   const { _id, name, description, image } = product;
 
@@ -47,9 +52,11 @@ export default function Hero() {
         <div className="flex-1 flex justify-center">
           {/* Use Link to navigate to the dynamic route */}
           <Link href={`/${_id}`}>
-            <img
-              src={image.asset.url}
+            <Image
+              src={image?.asset?.url || "/placeholder.png"}  // Fallback to avoid errors
               alt={name}
+              width={400}  // Ensure proper optimization
+              height={400}
               className="w-full max-w-sm md:max-w-md object-contain cursor-pointer"
             />
           </Link>
